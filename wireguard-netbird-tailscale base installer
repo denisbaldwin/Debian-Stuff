@@ -1,0 +1,78 @@
+#Wireguard, netbird and tailscale installer
+
+curl -O https://raw.githubusercontent.com/angristan/wireguard-install/master/wireguard-install.sh
+chmod +x wireguard-install.sh
+./wireguard-install.sh
+
+# Works on Debian 12 bookworm and most likely ubuntu flavors. Installs and starts the configs for wireguard, tailscale and netbird.
+
+apt update && apt upgrade -y  
+sudo apt full-upgrade-y
+sudo apt dist-upgrade-y
+sudo apt autoremove-y
+sudo apt clean-y
+
+
+apt install bash sudo git curl wget -y
+
+
+curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
+curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+
+
+sudo apt-get update 
+sudo apt-get install tailscale -y
+
+
+sudo tailscale up
+
+tailscale set --auto-update
+sudo apt-get update
+
+
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
+
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
+
+sudo tailscale set --advertise-exit-node
+
+sudo tailscale set --exit-node-allow-lan-access=true
+
+sudo apt update
+
+curl -fsSL https://pkgs.netbird.io/install.sh | sh
+
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg -y
+curl -sSL https://pkgs.netbird.io/debian/public.key | sudo gpg --dearmor --output /usr/share/keyrings/netbird-archive-keyring.gpg
+echo 'deb [signed-by=/usr/share/keyrings/netbird-archive-keyring.gpg] https://pkgs.netbird.io/debian stable main' | sudo tee /etc/apt/sources.list.d/netbird.list
+
+sudo apt update
+
+sudo apt-get install netbird netbird-ui -y
+
+  tar xcf ./netbird_<VERSION>.tar.gz
+  sudo mv netbird /usr/bin/netbird
+  sudo chown root:root /usr/bin/netbird
+  sudo chmod +x /usr/bin/netbird
+
+ export PATH=$PATH:/usr/bin
+
+  sudo netbird service install
+  sudo netbird service start
+
+  sudo netbird service enable
+
+sudo netbird up
+
+netbird status -d
+
+PAUSE
+
+# Now go to https://app.netbird.io/peers in your browser and finish setup
+
+
