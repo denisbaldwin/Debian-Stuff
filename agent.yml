@@ -19,10 +19,10 @@
 #backend-handshake-timeout: 15
 #backend-heartbeat-interval: 30
 #backend-heartbeat-timeout: 45
-#backend-url:
+backend-url:
   - "ws://192.168.200.72:8081"
 #cache-dir: "/var/cache/sensu/sensu-agent"
-#config-file: "/etc/sensu/agent.yml"
+config-file: "/etc/sensu/agent.yml"
 #deregister: false
 #deregistration-handler: "example_handler"
 #detect-cloud-provider: false
