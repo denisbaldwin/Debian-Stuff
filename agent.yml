@@ -87,7 +87,6 @@ disable-sockets: false
 #key-file: "/path/to/tls/agent-key.pem"
 #insecure-skip-tls-verify: false
 
-sudo systemctl start sensu-agent
 
 
 
